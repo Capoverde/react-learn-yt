@@ -1,0 +1,600 @@
+/**
+ * Helper mixins
+*/
+
+// Clearfix
+// http://www.cssmojo.com/latest_new_clearfix_so_far/
+// Other clearfix options: https://github.com/stubbornella/oocss/blob/master/oocss/src/components/utils/_clearfix-me.scss
+@mixin clearfix {
+    &::after {
+      clear: both;
+      content: "";
+      display: table;
+    }
+  }
+  
+  // Text selection
+  @mixin text-selection($color-selection, $color-selection-bg) {
+    ::-moz-selection {
+      // sass-lint:disable-line no-vendor-prefixes
+      background: $color-selection-bg;
+      color: $color-selection;
+      text-shadow: none;
+    }
+  
+    ::selection {
+      background: $color-selection-bg;
+      color: $color-selection;
+      text-shadow: none;
+    }
+  }
+  
+  //Placeholders
+  //Usage:
+  //@include placeholder;
+  @mixin placeholder {
+    // sass-lint:disable no-vendor-prefixes
+    ::-webkit-input-placeholder {
+      @content;
+    }
+    :-moz-placeholder {
+      @content;
+    }
+    ::-moz-placeholder {
+      @content;
+    }
+    :-ms-input-placeholder {
+      @content;
+    }
+  }
+  
+  //#1. RWD
+  //#1.a. fluid typography
+  //#1.b. media queries
+  //#2. custom
+  //#3. prefixes
+  
+  //#1.
+  //++++++++++++++++++++++++ RWD ++++++++++++++++++++++++
+  
+  //#1.a.
+  // —————————————————— fluid typography ————————————————————
+  
+  @mixin fluidSize($min-font-size: 12px, $max-font-size: 21px, $min-breakpoint: 320px, $max-breakpoint: 1920px) {
+    font-size: calc(
+      #{$min-font-size} + #{(($max-font-size / ($max-font-size * 0 + 1)) - ($min-font-size / ($min-font-size * 0 + 1)))} *
+        (
+          (100vw - #{$min-breakpoint}) / #{(
+              ($max-breakpoint / ($max-breakpoint * 0 + 1)) - ($min-breakpoint / ($min-breakpoint * 0 + 1))
+            )}
+        )
+    );
+  
+    @media screen and (max-width: $min-breakpoint) {
+      font-size: $min-font-size;
+    }
+  
+    @media screen and (min-width: $max-breakpoint) {
+      font-size: $max-font-size;
+    }
+  }
+  
+  // example of usage:
+  // html {
+  //   @include fluidSize(15px, 30px);
+  // }
+  // ————————————————————————————————————-----------------
+  
+  //#1.b.
+  //                   MEDIA QUERIES
+  //––––––––––––––––––––––––––––––––––––––––––––––––––
+  
+  // A map of breakpoints.
+  $breakpoints: (
+    xxs: 281px,
+    xs: 349px,
+    sm: 768px,
+    md: 1025px,
+    lg: 1920px
+  );
+  //  RESPOND ABOVE
+  //––––––––––––––––––––––––––––––––––––––––––––––––––
+  
+  // @include respond-above(sm) {}
+  @mixin respond-above($breakpoint) {
+    // If the breakpoint exists in the map.
+    @if map-has-key($breakpoints, $breakpoint) {
+      // Get the breakpoint value.
+      $breakpoint-value: map-get($breakpoints, $breakpoint);
+  
+      // Write the media query.
+      @media (min-width: $breakpoint-value) {
+        @content;
+      }
+  
+      // If the breakpoint doesn't exist in the map.
+    } @else {
+      // Log a warning.
+      @warn 'Invalid breakpoint: #{$breakpoint}.';
+    }
+  }
+  
+  //                  RESPOND BELOW
+  //––––––––––––––––––––––––––––––––––––––––––––––––––
+  
+  // @include respond-below(sm) {}
+  @mixin respond-below($breakpoint) {
+    // If the breakpoint exists in the map.
+    @if map-has-key($breakpoints, $breakpoint) {
+      // Get the breakpoint value.
+      $breakpoint-value: map-get($breakpoints, $breakpoint);
+  
+      // Write the media query.
+      @media (max-width: ($breakpoint-value - 1)) {
+        @content;
+      }
+  
+      // If the breakpoint doesn't exist in the map.
+    } @else {
+      // Log a warning.
+      @warn 'Invalid breakpoint: #{$breakpoint}.';
+    }
+  }
+  
+  //  RESPOND BETWEEN
+  //––––––––––––––––––––––––––––––––––––––––––––––––––
+  
+  // @include respond-between(sm, md) {}
+  @mixin respond-between($lower, $upper) {
+    // If both the lower and upper breakpoints exist in the map.
+    @if map-has-key($breakpoints, $lower) and map-has-key($breakpoints, $upper) {
+      // Get the lower and upper breakpoints.
+      $lower-breakpoint: map-get($breakpoints, $lower);
+      $upper-breakpoint: map-get($breakpoints, $upper);
+  
+      // Write the media query.
+      @media (min-width: $lower-breakpoint) and (max-width: ($upper-breakpoint - 1)) {
+        @content;
+      }
+  
+      // If one or both of the breakpoints don't exist.
+    } @else {
+      // If lower breakpoint is invalid.
+      @if (map-has-key($breakpoints, $lower) == false) {
+        // Log a warning.
+        @warn 'Your lower breakpoint was invalid: #{$lower}.';
+      }
+  
+      // If upper breakpoint is invalid.
+      @if (map-has-key($breakpoints, $upper) == false) {
+        // Log a warning.
+        @warn 'Your upper breakpoint was invalid: #{$upper}.';
+      }
+    }
+  }
+  
+  @mixin antialiasing {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  
+  //-----------------------------------------------------//
+  
+  //#2.
+  // ++++++++++++++++++ custom ++++++++++++++++++ //
+  
+  // - font-weights - //
+  $fontWeights: (
+    thin: 100,
+    thin-italic: 100i,
+    extra-light: 200,
+    exta-light-italic: 200i,
+    light: 300,
+    light-italic: 300i,
+    regular: 400,
+    regular-italic: 400i,
+    medium: 500,
+    medium-italc: 500i,
+    semi-bold: 600,
+    semi-bold-italic: 600i,
+    bold: 700,
+    bold-italic: 700i,
+    extra-bold: 800,
+    extra-bold-italic: 800i,
+    black: 900,
+    black-italic: 900i
+  );
+  
+  @function weigth($weight) {
+    @return map-get($fontWeights, $weight);
+  }
+  
+  // - transition - //
+  @mixin transition($property, $duration) {
+    -webkit-transition: $property $duration;
+    -moz-transition: $property $duration;
+    -ms-transition: $property $duration;
+    -o-transition: $property $duration;
+    transition: $property $duration;
+  }
+  
+  // @mixin transition-prop($property, $duration, $ease: ease-in-out, $delay: 0) {
+  //   -webkit-transition: $property $duration $ease $delay;
+  //   -moz-transition: $property $duration $ease $delay;
+  //   -ms-transition: $property $duration $ease $delay;
+  //   -o-transition: $property $duration $ease $delay;
+  //   transition: $property $duration $ease $delay;
+  // }
+  
+  // — link hover — //
+  @mixin link-hover($property, $duration, $color) {
+    &:hover {
+      @include transition($property, $duration);
+      color: $color;
+    }
+  }
+  
+  //  z-index
+  $z-index: (
+    modal: 200,
+    navigation: 100,
+    footer: 90,
+    triangle: 60,
+    navigation-rainbow: 50,
+    share-type: 41,
+    share: 40
+  );
+  
+  @function z-index($key) {
+    @return map-get($z-index, $key);
+  }
+  
+  @mixin z-index($key) {
+    z-index: z-index($key);
+  }
+  
+  @mixin position($pos) {
+    @if $pos == "absolute" {
+      position: absolute;
+    }
+    @if $pos == "relative" {
+      position: relative;
+    }
+    @if $pos == "fixed" {
+      -webkit-position: fixed;
+      position: fixed;
+    }
+    @if $pos == "sticky" {
+      -webkit-position: sticky;
+      position: sticky;
+    }
+  }
+  // Define vertical, horizontal, or both position
+  
+  @mixin center($position) {
+    position: absolute;
+  
+    @if $position == "vertical" {
+      top: 50%;
+      -webkit-transform: translateY(-50%);
+      -ms-transform: translateY(-50%);
+      transform: translateY(-50%);
+    } @else if $position == "horizontal" {
+      left: 50%;
+      -webkit-transform: translateX(-50%);
+      -ms-transform: translateX(-50%);
+      transform: translate(-50%);
+    } @else if $position == "both" {
+      top: 50%;
+      left: 50%;
+      -webkit-transform: translate(-50%, -50%);
+      -ms-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+    }
+  }
+  
+  // Using the mixin
+  
+  //.foo {
+  //@include center(both);
+  //}
+  
+  //.foo-parent {
+  //position: relative;
+  //}
+  
+  @mixin flexCenter($device) {
+    @if ($device == "desktop") {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    @if ($device == "mobile") {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-flow: wrap column;
+    }
+  }
+  
+  // 4 - Fullscreen Background Image
+  // --------------------------------
+  @mixin bg-cover($url) {
+    background: url($url) no-repeat center center fixed;
+    background-size: cover;
+  }
+  // 5 - Full Width/Height and Centered Image
+  // -------------------------------------------
+  
+  // Position an image within it's parent element so that it
+  // takes up the full height and width of the parent element, and
+  
+  // is positioned with its center in the middle
+  @mixin img-cover {
+    min-height: 100%;
+    width: 100%;
+    height: auto;
+    -o-object-fit: cover;
+    object-fit: cover;
+  }
+  
+  // square:
+  @mixin square($value: 100px) {
+    width: $value;
+    height: $value;
+  }
+  
+  //#3.
+  // ++++++++++++++++++ prefixy ++++++++++++++++ //
+  
+  @mixin text-shadow($string: 0 1px 3px rgba(0, 0, 0, 0.25)) {
+    text-shadow: $string;
+  }
+  
+  @mixin box-shadow($string) {
+    -webkit-box-shadow: $string;
+    -moz-box-shadow: $string;
+    box-shadow: $string;
+  }
+  
+  @mixin drop-shadow($x: 0, $y: 1px, $blur: 2px, $spread: 0, $alpha: 0.25) {
+    -webkit-box-shadow: $x $y $blur $spread rgba(0, 0, 0, $alpha);
+    -moz-box-shadow: $x $y $blur $spread rgba(0, 0, 0, $alpha);
+    box-shadow: $x $y $blur $spread rgba(0, 0, 0, $alpha);
+  }
+  
+  @mixin inner-shadow($x: 0, $y: 1px, $blur: 2px, $spread: 0, $alpha: rgba(0, 0, 0, 1)) {
+    -webkit-box-shadow: inset $x $y $blur $spread $alpha;
+    -moz-box-shadow: inset $x $y $blur $spread $alpha;
+    box-shadow: inset $x $y $blur $spread $alpha;
+  }
+  
+  @mixin box-sizing($type: border-box) {
+    -webkit-box-sizing: $type;
+    -moz-box-sizing: $type;
+    box-sizing: $type;
+  }
+  
+  @mixin border-radius($radius: 5px) {
+    -webkit-border-radius: $radius;
+    -moz-border-radius: $radius;
+    border-radius: $radius;
+    -moz-background-clip: padding;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+  }
+  
+  @mixin border-radiuses($topright: 0, $bottomright: 0, $bottomleft: 0, $topleft: 0) {
+    -webkit-border-top-right-radius: $topright;
+    -webkit-border-bottom-right-radius: $bottomright;
+    -webkit-border-bottom-left-radius: $bottomleft;
+    -webkit-border-top-left-radius: $topleft;
+  
+    -moz-border-radius-topright: $topright;
+    -moz-border-radius-bottomright: $bottomright;
+    -moz-border-radius-bottomleft: $bottomleft;
+    -moz-border-radius-topleft: $topleft;
+  
+    border-top-right-radius: $topright;
+    border-bottom-right-radius: $bottomright;
+    border-bottom-left-radius: $bottomleft;
+    border-top-left-radius: $topleft;
+    -moz-background-clip: padding;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+  }
+  
+  @mixin opacity($opacity: 0.5) {
+    -webkit-opacity: $opacity;
+    -moz-opacity: $opacity;
+    opacity: $opacity;
+    filter: alpha(opacity=$opacity);
+  }
+  
+  @mixin gradient($startColor: #eee, $endColor: white) {
+    background-color: $startColor;
+    background: -webkit-gradient(linear, left top, left bottom, from($startColor), to($endColor));
+    background: -webkit-linear-gradient(top, $startColor, $endColor);
+    background: -moz-linear-gradient(top, $startColor, $endColor);
+    background: -ms-linear-gradient(top, $startColor, $endColor);
+    background: -o-linear-gradient(top, $startColor, $endColor);
+  }
+  
+  @mixin horizontal-gradient($startColor: #eee, $endColor: white) {
+    background-color: $startColor;
+    background-image: -webkit-gradient(linear, left top, right top, from($startColor), to($endColor));
+    background-image: -webkit-linear-gradient(left, $startColor, $endColor);
+    background-image: -moz-linear-gradient(left, $startColor, $endColor);
+    background-image: -ms-linear-gradient(left, $startColor, $endColor);
+    background-image: -o-linear-gradient(left, $startColor, $endColor);
+  }
+  
+  @mixin animation($name, $duration: 300ms, $delay: 0, $ease: ease) {
+    -webkit-animation: $name $duration $delay $ease;
+    -moz-animation: $name $duration $delay $ease;
+    -ms-animation: $name $duration $delay $ease;
+    animation: $name $duration $delay $ease;
+  }
+  
+  @mixin transform($string) {
+    -webkit-transform: $string;
+    -moz-transform: $string;
+    -ms-transform: $string;
+    -o-transform: $string;
+    transform: $string;
+  }
+  
+  @mixin scale($factor) {
+    -webkit-transform: scale($factor);
+    -moz-transform: scale($factor);
+    -ms-transform: scale($factor);
+    -o-transform: scale($factor);
+    transform: scale($factor);
+  }
+  
+  @mixin scaleX($factor) {
+    -webkit-transform: scaleX($factor);
+    -moz-transform: scaleX($factor);
+    -ms-transform: scaleX($factor);
+    -o-transform: scaleX($factor);
+    transform: scaleX($factor);
+  }
+  
+  @mixin scaleY($factor) {
+    -webkit-transform: scaleY($factor);
+    -moz-transform: scaleY($factor);
+    -ms-transform: scaleY($factor);
+    -o-transform: scaleY($factor);
+    transform: scaleY($factor);
+  }
+  
+  @mixin rotate($direction, $deg) {
+    @if ($direction == "x") {
+      -webkit-transform: rotate($deg);
+      -moz-transform: rotate($deg);
+      -ms-transform: rotate($deg);
+      -o-transform: rotate($deg);
+      transform: rotate($deg);
+    }
+    @if ($direction == "y") {
+      -webkit-transform: rotateY($deg);
+      -moz-transform: rotateY($deg);
+      -ms-transform: rotateY($deg);
+      -o-transform: rotateY($deg);
+      transform: rotateY($deg);
+    }
+    @if ($direction == "z") {
+      -webkit-transform: rotateZ($deg);
+      -moz-transform: rotateZ($deg);
+      -ms-transform: rotateZ($deg);
+      -o-transform: rotateZ($deg);
+      transform: rotateZ($deg);
+    }
+    @if ($direction == "") {
+      -webkit-transform: rotate($deg);
+      -moz-transform: rotate($deg);
+      -ms-transform: rotate($deg);
+      -o-transform: rotate($deg);
+      transform: rotate($deg);
+    }
+  }
+  
+  @mixin skew($deg, $deg2) {
+    -webkit-transform: skew($deg, $deg2);
+    -moz-transform: skew($deg, $deg2);
+    -ms-transform: skew($deg, $deg2);
+    -o-transform: skew($deg, $deg2);
+    transform: skew($deg, $deg2);
+  }
+  
+  @mixin translate($x, $y: 0) {
+    -webkit-transform: translate($x, $y);
+    -moz-transform: translate($x, $y);
+    -ms-transform: translate($x, $y);
+    -o-transform: translate($x, $y);
+    transform: translate($x, $y);
+  }
+  
+  @mixin translate3d($x, $y: 0, $z: 0) {
+    -webkit-transform: translate3d($x, $y, $z);
+    -moz-transform: translate3d($x, $y, $z);
+    -ms-transform: translate3d($x, $y, $z);
+    -o-transform: translate3d($x, $y, $z);
+    transform: translate3d($x, $y, $z);
+  }
+  
+  @mixin perspective($value: 1000) {
+    -webkit-transform: perspective($value);
+    -moz-transform: perspective($value);
+    -ms-transform: perspective($value);
+    transform: perspective($value);
+  }
+  
+  @mixin transform-origin($x: center, $y: center) {
+    -webkit-transform-origin: $x $y;
+    -moz-transform-origin: $x $y;
+    -ms-transform-origin: $x $y;
+    -o-transform-origin: $x $y;
+  }
+  
+  @mixin brightness($string) {
+    -webkit-filter: brightness($string);
+    filter: brightness($string);
+  }
+  
+  @mixin grayscale($string) {
+    -webkit-filter: grayscale($string);
+    filter: grayscale($string);
+  }
+  
+  @mixin blur($string) {
+    -webkit-filter: blur($string);
+    filter: blur($string);
+  }
+  
+  @mixin sepia($string) {
+    -webkit-filter: sepia($string);
+    filter: sepia($string);
+  }
+  
+  @mixin contrasr($string) {
+    -webkit-filter: contrast($string);
+    filter: contrast($string);
+  }
+  
+  @mixin hue($string) {
+    -webkit-filter: hue-rotate($string);
+    filter: hue-rotate($string);
+  }
+  
+  @mixin invert($string) {
+    -webkit-filter: invert($string);
+    filter: invert($string);
+  }
+  
+  @mixin saturate($string) {
+    -webkit-filter: saturate($string);
+    filter: saturate($string);
+  }
+  
+  @mixin url($string) {
+    -webkit-filter: url($string);
+    filter: url($string);
+  }
+  
+  @mixin text-clip($color: transparent) {
+    background-clip: text;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    -ms-background-clip: text;
+    -o-background-clip: text;
+    color: $color;
+  }
+  
+  @mixin textorientation($orient) {
+    /*writing-mode: vertical-lr;*/
+    writing-mode: $orient;
+    -webkit-writing-mode: $orient;
+    -ms-writing-mode: $orient;
+  }

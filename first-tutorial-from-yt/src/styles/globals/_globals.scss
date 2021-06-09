@@ -1,0 +1,48 @@
+body {
+    position: relative;
+    background: $body-bg;
+    color: $main-clr;
+    font-family: "Poppins", sans-serif;
+    @include antialiasing();
+  }
+
+  nav,
+  header,
+  section,
+  footer {
+  width: 100%;
+  overflow: hidden;
+}
+
+nav {
+    z-index: 100000;
+  }
+  
+  a {
+    color: $main-clr;
+    @include transition(color, 0.3s);
+  
+    &:hover {
+      color: $link-hvr-clr;
+    }
+  }
+
+  .row {
+    width: 100%;
+    padding: 10px 0;
+  }
+
+  .container {
+    width: 80%;
+    height: 100%;
+    margin: 0 auto;
+  }
+
+  p.text{
+    font-size: 1.2em;
+    font-family: 'Source Code Pro', monospace;
+
+    @include respond-below(md){
+        font-size: 1em;
+    }
+  }
