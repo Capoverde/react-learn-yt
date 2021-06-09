@@ -1,0 +1,14 @@
+.btn {
+  padding: 4px 16px;
+  border: 1px solid $hero-clr;
+  color: $hero-clr;
+  outline: none;
+  font-family: "Source Code Pro", monospace;
+  background: transparent;
+  cursor: pointer;
+  @include border-radius(5px);
+
+  &:hover {
+    transform: scale(0.98);
+  }
+}

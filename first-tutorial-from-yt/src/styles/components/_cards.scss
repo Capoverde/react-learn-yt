@@ -2,4 +2,7 @@
   width: 400px;
   height: 500px;
   background: darken($body-bg, 10);
+  padding: 10px;
+  margin: 20px 0;
+  @include border-radius(16px);
 }

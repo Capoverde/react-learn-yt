@@ -1,4 +1,5 @@
 import React from 'react'
+import Card from './Card'
 
 const Container = () => {
   return (
@@ -6,6 +7,7 @@ const Container = () => {
       <p className='text'>
         lorem ipsum dolor sit ammet.....
       </p>
+      <Card />
     </div>
   )
 }

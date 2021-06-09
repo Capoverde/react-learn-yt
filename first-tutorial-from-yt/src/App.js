@@ -1,4 +1,7 @@
 import './styles/App.scss'
+import Button from './components/Button'
+import Container from './components/Container.jsx'
+import Card from './components/Card.jsx'
 
 function App () {
   return (
@@ -8,6 +11,7 @@ function App () {
           <p className='spacer'>
           Edit <code>src/App.js</code> and save to reload.
           </p>
+          <Button />
           <a
             className='App-link spacer'
             href='https://reactjs.org'
@@ -18,6 +22,7 @@ function App () {
           </a>
         </div>
       </header>
+      <Container />
     </div>
   )
 }
