@@ -1,10 +1,14 @@
 import React from 'react'
 
 const Card = () => {
+  const cardText = 'text inside of a Card'
+
   return (
     <div className='card'>
       <p className='text'>
-          this is text inside of a card
+
+        {cardText}
+
       </p>
     </div>
   )
