@@ -8,10 +8,6 @@ function App () {
   const greets = `Hello World!`;
   const react_link = `Learn React`;
 
-
-
-
-
   return (
     <div className='App'>
       <header className='App-header'>
