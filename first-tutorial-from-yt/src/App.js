@@ -4,13 +4,21 @@ import Container from './components/Container.jsx'
 import Card from './components/Card.jsx'
 
 function App () {
+
+  const greets = `Hello World!`;
+  const react_link = `Learn React`;
+
+
+
+
+
   return (
     <div className='App'>
       <header className='App-header'>
         <div className='container'>
-          <p className='spacer'>
-          Edit <code>src/App.js</code> and save to reload.
-          </p>
+          <h1 className='spacer text'>
+          {greets.toUpperCase()}
+          </h1>
           <Button />
           <a
             className='App-link spacer'
@@ -18,7 +26,7 @@ function App () {
             target='_blank'
             rel='noopener noreferrer'
           >
-          Learn React
+          {react_link}
           </a>
         </div>
       </header>
