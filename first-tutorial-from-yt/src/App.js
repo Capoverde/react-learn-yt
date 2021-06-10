@@ -2,6 +2,7 @@ import './styles/App.scss'
 import Button from './components/Button'
 import Container from './components/Container.jsx'
 import Card from './components/Card.jsx'
+import Counetr from './components/Conuter'
 
 function App () {
 
