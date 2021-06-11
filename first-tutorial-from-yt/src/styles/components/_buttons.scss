@@ -7,6 +7,8 @@
   background: transparent;
   cursor: pointer;
   @include border-radius(5px);
+  margin-top: 50px;
+
 
   &:hover {
     transform: scale(0.98);

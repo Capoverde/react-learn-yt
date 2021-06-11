@@ -43,6 +43,14 @@ a {
   margin: 0 auto;
 }
 
+.App-container{
+  @extend .container;
+  display: flex;
+  flex-direction: column;
+ align-items: center;
+ padding: 50px 0;
+}
+
 .text {
   font-size: 1.2em;
   font-family: "Source Code Pro", monospace;
